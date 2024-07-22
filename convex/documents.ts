@@ -1,7 +1,6 @@
 
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-
 export const getDocuments = query({
     async handler(ctx) {
         const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier

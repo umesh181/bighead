@@ -5,6 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { SignInButton, UserButton } from "@clerk/nextjs";
 import { Authenticated, Unauthenticated, useMutation, useQuery } from "convex/react";
 
+
 export default function Home() {
   const documents= useQuery(api.documents.getDocuments);
   const createDocument= useMutation(api.documents.createDocument);
