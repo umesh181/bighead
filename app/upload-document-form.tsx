@@ -4,12 +4,12 @@ import { z } from "zod";
 
 import { LoadingButton } from "@/components/loading-button";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
@@ -82,7 +82,7 @@ export default function UploadDocumentForm({
                 <Input
                   {...fieldProps}
                   type="file"
-                  accept=".txt,.xml,.doc"
+                  accept=".txt,.xml,.doc,.pdf"
                   onChange={(event) => {
                     const file = event.target.files?.[0];
                     onChange(file);
