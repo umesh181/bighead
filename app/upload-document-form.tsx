@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
   title: z.string().min(1).max(250),
+  description: z.string().min(1).max(200),
   file: z.instanceof(File),
 });
 
@@ -35,10 +36,12 @@ export default function UploadDocumentForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
+      description: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("Form values:", values);
     const url = await generateUploadUrl();
 
     const result = await fetch(url, {
@@ -50,7 +53,9 @@ export default function UploadDocumentForm({
 
     await createDocument({
       title: values.title,
+      description: values.description ?? "",
       fileId: storageId as Id<"_storage">,
+
     });
     onUpload();
   }
@@ -58,7 +63,7 @@ export default function UploadDocumentForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
@@ -70,9 +75,22 @@ export default function UploadDocumentForm({
               <FormMessage />
             </FormItem>
           )}
-        />
+         />
+         <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Document Description" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+         />
 
-<FormField
+          <FormField
           control={form.control}
           name="file"
           render={({ field: { value, onChange, ...fieldProps } }) => (

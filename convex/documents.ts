@@ -4,9 +4,10 @@ import {
   MutationCtx,
   QueryCtx,
   action,
+  internalMutation,
   internalQuery,
   mutation,
-  query,
+  query
 } from "./_generated/server";
 
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
@@ -17,7 +18,7 @@ import { Id } from "./_generated/dataModel";
 // const openai = new OpenAI({
 //   apiKey: process.env.OPENAI_API_KEY,
 // });
-
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
 export async function hasAccessToDocument(
   ctx: MutationCtx | QueryCtx,
@@ -65,7 +66,7 @@ export const getDocuments = query({
         console.log(userId);
         
         if (!userId) {
-          return [];
+          return undefined;
         }
         return await ctx.db
         .query("documents")
@@ -84,6 +85,7 @@ export const getDocuments = query({
       if (!accessObj) {
         return null;
       }
+      console.log("Fetched document:", accessObj.document); 
   
       return {
         ...accessObj.document,
@@ -97,6 +99,7 @@ export const createDocument = mutation({
     args:{
         title:v.string(),
         fileId: v.id("_storage"),
+        description:v.string(),
     },
 
     async handler(ctx, args) {
@@ -106,18 +109,80 @@ export const createDocument = mutation({
         if (!userId) {
           throw new ConvexError('Not authenticated')
         }
-        
-        await ctx.db.insert('documents',{
+        console.log("Creating document with:", args);
+        const documentId = await ctx.db.insert("documents", {
             title: args.title,
             tokenIdentifier:userId,
             fileId: args.fileId,
-        })
+            description: args.description,
+        });
+
+        // await ctx.scheduler.runAfter(
+        //   0,
+        //   internal.documents.generateDocumentDescription,
+        //   {
+        //     fileId: args.fileId,
+        //     documentId,
+        //   }
+        // );
     },
-})
+});
+//auto description generator 
+// export const generateDocumentDescription = internalAction({
+//   args: {
+//     fileId: v.id("_storage"),
+//     documentId: v.id("documents"),
+//   },
+//   async handler(ctx, args) {
+//     const file = await ctx.storage.get(args.fileId);
+
+//     if (!file) {
+//       throw new ConvexError("File not found");
+//     }
+
+//     const text = await file.text();
+
+//     const modelName = "gemini-pro";
+
+//       const model = genAI.getGenerativeModel({ model: modelName });
+//       const questionPrompt = `give me a short summery in less then 2 lines for the givern text . Here is a text file:${text} `;
+// const chat = model.startChat({
+//   // generationConfig,
+//   // safetySettings,
+// });
+
+//   const result = await chat.sendMessage([{ text: questionPrompt }]);
+//   const response = result.response.text();
+
+//       console.log(response);
+
+//     await ctx.runMutation(internal.documents.updateDocumentDescription, {
+//       documentId: args.documentId,
+//       description: response,
+//     });
+//   },
+// });
+
+export const updateDocumentDescription = internalMutation({
+  args: {
+    documentId: v.id("documents"),
+    description: v.string(),
+  },
+  async handler(ctx, args) {
+    await ctx.db.patch(args.documentId, {
+      description: args.description,
+    });
+  },
+});
 
 
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
+
+
+
+
+// chat with docs 
+
 export const askQuestion = action({
   args: {
     question: v.string(),
@@ -149,10 +214,7 @@ export const askQuestion = action({
 
     const { question } = args;
 
-    const modelName = "gemini-1.0-pro"; 
-
-    // Utilize Google Generative AI here
-    // const response = await handleQuestionWithGemini(question, modelName,text);
+    const modelName = "gemini-1.0-pro";
     
     await ctx.runMutation(internal.chats.createChatRecord, {
       documentId: args.documentId,
@@ -238,3 +300,41 @@ async function handleQuestionWithGemini(question: string, modelName: string, tex
   console.log(response.text);
   return response.text();
 }
+
+//deleting the document:
+export const deleteDocument = mutation({
+  args: {
+    documentId: v.id("documents"),
+  },
+  async handler(ctx, args) {
+    const accessObj = await hasAccessToDocument(ctx, args.documentId);
+
+    if (!accessObj) {
+      throw new ConvexError("You do not have access to this document");
+    }
+    await ctx.storage.delete(accessObj.document.fileId);
+    // Fetch the chats associated with the document using the correct Convex API
+    const chats = await ctx.db.query("chats")
+      .withIndex("by_documentId_tokenIdentifier", q => q.eq("documentId", args.documentId))
+      .collect();
+
+    // Delete the associated chats
+    for (const chat of chats) {
+      await ctx.db.delete(chat._id);
+    }
+
+   
+    await ctx.db.delete(args.documentId);
+  },
+});
+
+export const getChatsByDocumentId = query({
+  args: {
+    documentId: v.id("documents"),
+  },
+  async handler(ctx, args) {
+    return await ctx.db.query("chats")
+      .withIndex("by_documentId_tokenIdentifier", q => q.eq("documentId", args.documentId))
+      .collect();
+  },
+});
