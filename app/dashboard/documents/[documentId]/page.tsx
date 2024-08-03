@@ -22,7 +22,7 @@ export default function DocumentPage({
   
 
   return (
-    <main className="p-20 pt-10 space-y-8">
+    <main className="p-10 pt-3 space-y-8">
       {!document && (
         <div className="space-y-8">
           <div>
@@ -51,7 +51,7 @@ export default function DocumentPage({
               </TabsList>
 
               <TabsContent value="document">
-                <div className="bg-gray-900 p-4 rounded-xl flex-1 h-[500px]">
+                <div className="bg-neutral-900 p-4 rounded-xl flex-1 h-[500px]">
                   {document.documentUrl && (
                     <iframe
                       className="w-full h-full"

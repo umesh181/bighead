@@ -2,14 +2,14 @@
 
 import { LoadingButton } from "@/components/loading-button";
 import {
-    AlertDialog,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
@@ -55,7 +55,7 @@ export function DeleteDocumentButton({
                 documentId,
               })
                 .then(() => {
-                  router.push("/");
+                  router.push("/dashboard");
                 })
                 .finally(() => {
                   setIsLoading(false);
