@@ -127,41 +127,6 @@ export const createDocument = mutation({
         // );
     },
 });
-//auto description generator 
-// export const generateDocumentDescription = internalAction({
-//   args: {
-//     fileId: v.id("_storage"),
-//     documentId: v.id("documents"),
-//   },
-//   async handler(ctx, args) {
-//     const file = await ctx.storage.get(args.fileId);
-
-//     if (!file) {
-//       throw new ConvexError("File not found");
-//     }
-
-//     const text = await file.text();
-
-//     const modelName = "gemini-pro";
-
-//       const model = genAI.getGenerativeModel({ model: modelName });
-//       const questionPrompt = `give me a short summery in less then 2 lines for the givern text . Here is a text file:${text} `;
-// const chat = model.startChat({
-//   // generationConfig,
-//   // safetySettings,
-// });
-
-//   const result = await chat.sendMessage([{ text: questionPrompt }]);
-//   const response = result.response.text();
-
-//       console.log(response);
-
-//     await ctx.runMutation(internal.documents.updateDocumentDescription, {
-//       documentId: args.documentId,
-//       description: response,
-//     });
-//   },
-// });
 
 export const updateDocumentDescription = internalMutation({
   args: {

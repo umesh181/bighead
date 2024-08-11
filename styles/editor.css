@@ -1,0 +1,7 @@
+.custom-editor-class {
+    /* Reset or customize the styling */
+    all: unset; /* This removes all inherited styles */
+    background: transparent; /* Customize as needed */
+    border: none; /* Remove border */
+    /* Add your desired styles here */
+  }
