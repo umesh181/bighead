@@ -35,9 +35,9 @@ export default function Home() {
       {documents && documents.length === 0 && (
         <div className="py-12 flex flex-col justify-center items-center gap-8">
           <Image
-            src="/documents.svg"
-            width="200"
-            height="200"
+            src="/silicon.gif"
+            width="400"
+            height="400"
             alt="a picture of a girl holding documents"
           />
           <h2 className="text-2xl">You have no documents</h2>

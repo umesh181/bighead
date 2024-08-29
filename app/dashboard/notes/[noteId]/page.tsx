@@ -1,5 +1,5 @@
 "use client";
-import NovelEditor from "@/components/NovelEditor";
+import Editor from "@/components/editor/advanced-editor";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
@@ -13,10 +13,18 @@ export default function EditorPage({params,
   const note = useQuery(api.notes.getNote, {
     noteId: params.noteId,
   });
-  const [content, setContent] = useState<string | undefined>(undefined);
+  const [value, setValue] = useState<string | undefined>(undefined);
   return (
       <div>
-        <NovelEditor title={note?.text} setContent={setContent} />
+        <div className="container p-8">
+          <div className="text-4xl pb-4">{note?.text}</div>
+         <div className="">
+           <Editor initialValue={value} onChange={setValue} />
+           {/* <div className="">{parse(`${value}`)}</div> */}
+         </div>
+       </div>
+
+        {/* <NovelEditor title={note?.text} setContent={setContent} /> */}
         {/* <div className="">
           <Card>
             <CardContent>
@@ -27,5 +35,29 @@ export default function EditorPage({params,
         </div> */}
       </div>
     
+
   );
 }
+
+
+// "use client";
+// import React from "react";
+// import Editor from "@/components/editor/advanced-editor";
+// import { JSONContent } from "novel";
+// import { useState } from "react";
+
+// import { ModeToggle } from "@/components/ModeToggle";
+// import { defaultValue } from "./default-value";
+// import parse from "html-react-parser";
+// export default function page() {
+//   const [value, setValue] = useState<string | undefined>(undefined);
+//   console.log(value);
+//   return (
+//     <div className="container p-8">
+//       <div className="grid grid-cols-2 gap-6">
+//         <Editor initialValue={value} onChange={setValue} />
+//         <div className="">{parse(`${value}`)}</div>
+//       </div>
+//     </div>
+//   );
+// }
