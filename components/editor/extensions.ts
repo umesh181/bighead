@@ -1,17 +1,18 @@
 import {
+  AIHighlight,
+  HorizontalRule,
+  Placeholder,
+  StarterKit,
+  TaskItem,
+  TaskList,
   TiptapImage,
   TiptapLink,
   UpdatedImage,
-  TaskList,
-  TaskItem,
-  HorizontalRule,
-  StarterKit,
-  Placeholder,
-  AIHighlight,
 } from "novel/extensions";
 import { UploadImagesPlugin } from "novel/plugins";
 
 import { cx } from "class-variance-authority";
+
 
 const aiHighlight = AIHighlight;
 const placeholder = Placeholder;

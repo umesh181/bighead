@@ -11,6 +11,8 @@ export default defineSchema({
 
   notes: defineTable({
     text: v.string(),
+    content: v.string(),
+    plainTextContent: v.string(),
     tokenIdentifier: v.string(),
   }).index("by_tokenIdentifier", ["tokenIdentifier"]),
 

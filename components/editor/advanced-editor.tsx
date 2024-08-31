@@ -1,34 +1,34 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import {
-  EditorRoot,
-  EditorCommand,
-  EditorCommandItem,
-  EditorCommandEmpty,
-  EditorContent,
-  type JSONContent,
-  EditorCommandList,
   EditorBubble,
+  EditorCommand,
+  EditorCommandEmpty,
+  EditorCommandItem,
+  EditorCommandList,
+  EditorContent,
+  EditorRoot,
+  type JSONContent,
 } from "novel";
 import { ImageResizer, handleCommandNavigation } from "novel/extensions";
+import { useState } from "react";
+import { defaultExtensions } from "./extensions";
+import { ColorSelector } from "./selectors/color-selector";
+import { LinkSelector } from "./selectors/link-selector";
+import { NodeSelector } from "./selectors/node-selector";
 
 import { handleImageDrop, handleImagePaste } from "novel/plugins";
-
 import { Separator } from "../ui/separator";
-import { defaultExtensions } from "./extensions";
-import { slashCommand, suggestionItems } from "./slash-command";
 import { uploadFn } from "./image-upload";
-import { NodeSelector } from "./selectors/node-selector";
-import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
-import { ColorSelector } from "./selectors/color-selector";
+import { slashCommand, suggestionItems } from "./slash-command";
 
 const extensions = [...defaultExtensions, slashCommand];
 
 interface EditorProp {
-  initialValue?: string;
-  onChange: (value: string) => void;
+  initialValue?: JSONContent;
+  onChange: (value: JSONContent) => void;
 }
+
 const Editor = ({ initialValue, onChange }: EditorProp) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
@@ -52,7 +52,7 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
           },
         }}
         onUpdate={({ editor }) => {
-          onChange(editor.getHTML());
+          onChange(editor.getJSON());
         }}
         slotAfter={<ImageResizer />}
       >
@@ -99,6 +99,21 @@ const Editor = ({ initialValue, onChange }: EditorProp) => {
           <ColorSelector open={openColor} onOpenChange={setOpenColor} />
         </EditorBubble>
       </EditorContent>
+      <style jsx global>{`
+        .ProseMirror h1 { font-size: 2em; font-weight: bold; }
+        .ProseMirror h2 { font-size: 1.5em; font-weight: bold; }
+        .ProseMirror h3 { font-size: 1.17em; font-weight: bold; }
+        .ProseMirror h4 { font-size: 1em; font-weight: bold; }
+        .ProseMirror h5 { font-size: 0.83em; font-weight: bold; }
+        .ProseMirror h6 { font-size: 0.67em; font-weight: bold; }
+        .ProseMirror p.is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          float: left;
+          color: #adb5bd;
+          pointer-events: none;
+          height: 0;
+        }
+      `}</style>
     </EditorRoot>
   );
 };

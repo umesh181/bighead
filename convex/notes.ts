@@ -1,10 +1,11 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
-// Create note mutation
 export const createNote = mutation({
   args: {
-    text: v.string(),  
+    text: v.string(),
+    content: v.string(),
+    plainTextContent: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -15,7 +16,8 @@ export const createNote = mutation({
 
     const note = await ctx.db.insert("notes", {
       text: args.text,
-       // Save content
+      content: args.content,
+      plainTextContent: args.plainTextContent,
       tokenIdentifier: userId,
     });
 
@@ -23,11 +25,11 @@ export const createNote = mutation({
   },
 });
 
-// Update note content mutation for auto-saving
 export const updateNoteContent = mutation({
   args: {
     noteId: v.id("notes"),
     content: v.string(),
+    plainTextContent: v.string(),
   },
   async handler(ctx, args) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -43,12 +45,14 @@ export const updateNoteContent = mutation({
     }
 
     await ctx.db.patch(args.noteId, {
-      
+      content: args.content,
+      plainTextContent: args.plainTextContent,
     });
+
+    return "saved";
   },
 });
 
-// Get all notes for a user
 export const getNotes = query({
   async handler(ctx) {
     const userId = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
@@ -66,7 +70,6 @@ export const getNotes = query({
     return notes;
   },
 });
-
 
 export const getNote = query({
   args: {
