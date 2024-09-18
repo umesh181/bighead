@@ -1,6 +1,5 @@
 
 import { ConvexError, v } from "convex/values";
-
 import {
   MutationCtx,
   QueryCtx,
@@ -208,17 +207,11 @@ export const askQuestion = action({
 
 async function extractTextFromFile(file: Blob) {
   const fileType = file.type;
-
+  
   if (fileType === 'application/pdf') {
-    const arrayBuffer = await file.arrayBuffer();
-    const uint8Array = new Uint8Array(arrayBuffer);
-    const text = new TextDecoder("utf-8").decode(uint8Array);
-    // Use a PDF parsing library like pdf-lib or pdfjs-dist here
-    // const pdfData = await parsePdf(text);
-    return "1234"; // Replace with parsed text
+    return "";
   }
 
-  // Add additional conditions for other file types if necessary
   return await file.text();
 }
 

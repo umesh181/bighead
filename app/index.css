@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+html,body{
+  height: 100%;
+  width: 100%;
+  /* overflow-x: hidden; */  
+}
+/* HeroCards background shadow */
+.shadow {
+  position: absolute;
+  background: hsla(343, 53%, 49%, 0%); /* Changed color to #ab354f equivalent */
+  border-radius: 24px;
+  rotate: 35deg;
+
+  width: 260px;
+  top: 200px;
+  height: 400px;
+  filter: blur(150px);
+  animation: shadow-slide infinite 4s linear alternate;
+}
+
+@keyframes shadow-slide {
+  from {
+    background: hsla(343, 53%, 49%, 20%); /* Changed color to #ab354f equivalent */
+    right: 460px;
+  }
+  to {
+    background: hsla(343, 53%, 49%, 80%); /* Changed color to #ab354f equivalent */
+    right: 160px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .shadow {
+    top: 70px;
+  }
+
+  @keyframes shadow-slide {
+    from {
+      background: hsla(343, 53%, 49%, 20%); /* Changed color to #ab354f equivalent */
+      right: 460px;
+    }
+    to {
+      background: hsla(343, 53%, 49%, 50%); /* Changed color to #ab354f equivalent */
+      right: 160px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .shadow {
+    top: 70px;
+    width: 100px;
+    height: 350px;
+    filter: blur(60px);
+  }
+
+  @keyframes shadow-slide {
+    from {
+      background: hsla(343, 53%, 49%, 20%); /* Changed color to #ab354f equivalent */
+      right: 280px;
+    }
+    to {
+      background: hsla(343, 53%, 49%, 30%); /* Changed color to #ab354f equivalent */
+      right: 100px;
+    }
+  }
+}
