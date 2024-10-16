@@ -1,19 +1,17 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, ClipboardPen, Cog, FilesIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, ClipboardPen, FilesIcon, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-
 export default function SideNav() {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
-
   const navItems = [
+    { icon: Search , label: "Search", href: "/dashboard/Search" },
     { icon: FilesIcon, label: "Documents", href: "/dashboard/documents" },
     { icon: ClipboardPen, label: "Notes", href: "/dashboard/notes" },
-    { icon: Cog, label: "Settings", href: "/dashboard/settings" },
   ];
 
   return (

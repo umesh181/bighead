@@ -1,4 +1,4 @@
-
+import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 import { ConvexError, v } from "convex/values";
 import {
   MutationCtx,
@@ -9,8 +9,6 @@ import {
   mutation,
   query
 } from "./_generated/server";
-
-import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
 
 
 import { internal } from "./_generated/api";
