@@ -15,6 +15,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as chats from "../chats.js";
+import type * as clerk from "../clerk.js";
 import type * as documents from "../documents.js";
 import type * as notes from "../notes.js";
 import type * as search from "../search.js";
@@ -29,6 +30,7 @@ import type * as search from "../search.js";
  */
 declare const fullApi: ApiFromModules<{
   chats: typeof chats;
+  clerk: typeof clerk;
   documents: typeof documents;
   notes: typeof notes;
   search: typeof search;

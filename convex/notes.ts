@@ -34,6 +34,8 @@ export const createNote = mutation({
       noteId,
       text: args.plainTextContent,
     });
+
+    return noteId;
   },
 });
 

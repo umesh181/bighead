@@ -13,6 +13,7 @@ import {
 
 import { internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
+import { embed } from "./notes";
 // const openai = new OpenAI({
 //   apiKey: process.env.OPENAI_API_KEY,
 // });
@@ -114,15 +115,8 @@ export const createDocument = mutation({
             fileId: args.fileId,
             description: args.description,
         });
-
-        // await ctx.scheduler.runAfter(
-        //   0,
-        //   internal.documents.generateDocumentDescription,
-        //   {
-        //     fileId: args.fileId,
-        //     documentId,
-        //   }
-        // );
+        
+      
     },
 });
 
@@ -130,10 +124,12 @@ export const updateDocumentDescription = internalMutation({
   args: {
     documentId: v.id("documents"),
     description: v.string(),
+    embedding: v.array(v.float64()),
   },
   async handler(ctx, args) {
     await ctx.db.patch(args.documentId, {
       description: args.description,
+      embedding: args.embedding,
     });
   },
 });
@@ -173,7 +169,22 @@ export const askQuestion = action({
     
     const text = await extractTextFromFile(file);
 
+    const embedding = await embed(text);
 
+    const doc = await ctx.runQuery(internal.documents.hasAccessToDocumentQuery, {
+      documentId: args.documentId,
+    });
+    
+    if (!doc) {
+      throw new ConvexError("Document not found");
+    }
+    
+    await ctx.runMutation(internal.documents.updateDocumentDescription, {
+      documentId: args.documentId,
+      description:doc.document.description,
+      embedding,
+    });
+    
 
     const { question } = args;
 

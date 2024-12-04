@@ -58,6 +58,7 @@
     "react-hook-form": "^7.52.1",
     "react-pdf": "^9.1.0",
     "sonner": "^1.5.0",
+    "svix": "^1.37.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "text-from-pdf": "^1.1.2",

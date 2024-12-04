@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexReactClient } from "convex/react";

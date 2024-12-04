@@ -5,11 +5,13 @@ import { ChevronLeft, ChevronRight, ClipboardPen, FilesIcon, Search } from "luci
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+
 export default function SideNav() {
-  const [collapsed, setCollapsed] = useState(false);
+  // Set collapsed to true by default
+  const [collapsed, setCollapsed] = useState(true); 
   const pathname = usePathname();
   const navItems = [
-    { icon: Search , label: "Search", href: "/dashboard/Search" },
+    { icon: Search, label: "Search", href: "/dashboard/Search" },
     { icon: FilesIcon, label: "Documents", href: "/dashboard/documents" },
     { icon: ClipboardPen, label: "Notes", href: "/dashboard/notes" },
   ];
