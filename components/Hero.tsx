@@ -16,7 +16,7 @@ export const Hero = () => {
             </span>{" "}
             
           </h1>{" "}
-          so you don't have to.{" "}
+          so you don't have to!{" "}
           
         </main>
 
