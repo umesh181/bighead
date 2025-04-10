@@ -188,7 +188,7 @@ export const askQuestion = action({
 
     const { question } = args;
 
-    const modelName = "gemini-1.0-pro";
+    const modelName = "gemini-2.0-flash";
     
     await ctx.runMutation(internal.chats.createChatRecord, {
       documentId: args.documentId,
